@@ -9,14 +9,17 @@ def main():
         for c in range(connect4.column_count):
             for r in range(connect4.row_count):
                 pygame.draw.rect(screen, blue, (c * squaresize, r * squaresize + squaresize, squaresize, squaresize))
-                pygame.draw.circle(screen, black, (int(c * squaresize + squaresize / 2), int(r * squaresize + squaresize + squaresize / 2)), radius)
+                pygame.draw.circle(screen, black, (
+                    int(c * squaresize + squaresize / 2), int(r * squaresize + squaresize + squaresize / 2)), radius)
 
         for c in range(connect4.column_count):
             for r in range(connect4.row_count):
                 if board[r][c] == 1:
-                    pygame.draw.circle(screen, red, (int(c * squaresize + squaresize / 2), height - int(r * squaresize + squaresize / 2)), radius)
+                    pygame.draw.circle(screen, red, (
+                        int(c * squaresize + squaresize / 2), height - int(r * squaresize + squaresize / 2)), radius)
                 elif board[r][c] == 2:
-                    pygame.draw.circle(screen, yellow, (int(c * squaresize + squaresize / 2), height - int(r * squaresize + squaresize / 2)), radius)
+                    pygame.draw.circle(screen, yellow, (
+                        int(c * squaresize + squaresize / 2), height - int(r * squaresize + squaresize / 2)), radius)
 
         pygame.display.update()
 
@@ -34,10 +37,10 @@ def main():
     squaresize = 100
 
     width = connect4.column_count * squaresize
-    height = (connect4.row_count+1) * squaresize
+    height = (connect4.row_count + 1) * squaresize
 
     size = (width, height)
-    radius = int(squaresize/2 - 5)
+    radius = int(squaresize / 2 - 5)
 
     screen = pygame.display.set_mode(size)
 
@@ -55,19 +58,19 @@ def main():
                 sys.exit()
 
             if event.type == pygame.MOUSEMOTION:
-                pygame.draw.rect(screen, black, (0,0, width, squaresize))
+                pygame.draw.rect(screen, black, (0, 0, width, squaresize))
                 posx = event.pos[0]
                 if turn == 0:
-                    pygame.draw.circle(screen, red, (posx, int(squaresize/2)), radius)
+                    pygame.draw.circle(screen, red, (posx, int(squaresize / 2)), radius)
                 else:
-                    pygame.draw.circle(screen, yellow, (posx, int(squaresize/2)), radius)
+                    pygame.draw.circle(screen, yellow, (posx, int(squaresize / 2)), radius)
             pygame.display.update()
 
             if event.type == pygame.MOUSEBUTTONDOWN:
-                pygame.draw.rect(screen, black, (0,0, width, squaresize))
+                pygame.draw.rect(screen, black, (0, 0, width, squaresize))
                 if turn == 0:
                     posx = event.pos[0]
-                    col = int(math.floor(posx/squaresize))
+                    col = int(math.floor(posx / squaresize))
 
                     if connect4.is_valid_location(board, col):
                         row = connect4.get_next_open_row(board, col)
@@ -80,7 +83,7 @@ def main():
 
                 else:
                     posx = event.pos[0]
-                    col = int(math.floor(posx/squaresize))
+                    col = int(math.floor(posx / squaresize))
 
                     if connect4.is_valid_location(board, col):
                         row = connect4.get_next_open_row(board, col)
@@ -97,6 +100,19 @@ def main():
                 turn = turn % 2
 
                 if game_over:
+                    while True:
+                        for event in pygame.event.get():
+                            if event.type == pygame.MOUSEBUTTONDOWN:
+                                # Reset game state
+                                board = connect4.create_board()
+                                game_over = False
+                                turn = 0
+                                draw_board(board)
+                                pygame.display.update()
+                                break
+                        else:
+                            continue
+                        break
                     pygame.time.wait(3000)
 
 
