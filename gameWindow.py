@@ -5,12 +5,15 @@ import math
 
 
 def main():
+    player1_score = 0
+    player2_score = 0
     def start_game():
         font = pygame.font.SysFont("monospace", 75)
         label = font.render("Start Game", 1, black)
         button_rect = label.get_rect(center=(width / 2, height / 2))
         pygame.draw.rect(screen, yellow, button_rect, border_radius=10)
         screen.blit(label, button_rect)
+        show_score(player1_score, player2_score)
         pygame.display.update()
         while True:
             for event in pygame.event.get():
@@ -20,6 +23,11 @@ def main():
                 elif event.type == pygame.MOUSEBUTTONDOWN:
                     if button_rect.collidepoint(event.pos):
                         return
+
+    def show_score(player1_score, player2_score):
+        font = pygame.font.SysFont("monospace", 20)
+        label = font.render(f"Player 1: {player1_score}   Player 2: {player2_score}", 1, (255, 255, 255))
+        screen.blit(label, (10, 10))
 
     def draw_board(board):
         for c in range(connect4.column_count):
@@ -70,6 +78,7 @@ def main():
 
     # Window loop
     while not game_over:
+        show_score(player1_score, player2_score)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -97,6 +106,8 @@ def main():
                         if connect4.check_for_win(board, 1):
                             label = myfont.render('Player 1 wins!', 1, red)
                             screen.blit(label, (40, 10))
+                            player1_score += 1
+                            show_score(player1_score, player2_score)
                             game_over = True
 
                 else:
@@ -110,6 +121,8 @@ def main():
                         if connect4.check_for_win(board, 2):
                             label = myfont.render('Player 2 wins!', 1, yellow)
                             screen.blit(label, (40, 10))
+                            player2_score += 1
+                            show_score(player1_score, player2_score)
                             game_over = True
 
                 draw_board(board)
