@@ -5,6 +5,22 @@ import math
 
 
 def main():
+    def start_game():
+        font = pygame.font.SysFont("monospace", 75)
+        label = font.render("Start Game", 1, black)
+        button_rect = label.get_rect(center=(width / 2, height / 2))
+        pygame.draw.rect(screen, yellow, button_rect, border_radius=10)
+        screen.blit(label, button_rect)
+        pygame.display.update()
+        while True:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+                elif event.type == pygame.MOUSEBUTTONDOWN:
+                    if button_rect.collidepoint(event.pos):
+                        return
+
     def draw_board(board):
         for c in range(connect4.column_count):
             for r in range(connect4.row_count):
@@ -43,6 +59,8 @@ def main():
     radius = int(squaresize / 2 - 5)
 
     screen = pygame.display.set_mode(size)
+
+    start_game()
 
     draw_board(board)
     pygame.display.set_caption('Connect 4!')
@@ -104,6 +122,8 @@ def main():
                         for event in pygame.event.get():
                             if event.type == pygame.MOUSEBUTTONDOWN:
                                 # Reset game state
+                                pygame.draw.rect(screen, black, (0, 0, width, squaresize))
+                                start_game()
                                 board = connect4.create_board()
                                 game_over = False
                                 turn = 0
@@ -118,3 +138,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+
